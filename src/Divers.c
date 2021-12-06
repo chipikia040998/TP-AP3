@@ -1,20 +1,19 @@
-//inclusion des fichier nécessaires
-#include "../include/Divers.h"
-
 //inclusion des bibliothèques
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+//inclusion de fichier
+#include "./include/Divers.h"
 
-void Stop (char *message[], bool stop)
+void AfficherMessage (char * message, bool stop)
 {
 	//affichage du message
-	printf("%s",message);
+	printf("%s \n", message);
 
-	//on regarde la valeur de stop, si stop on laisse afficher 100s avant de quitter
+	//on regarde la valeur de stop, si stop on laisse afficher avant de quitter
 	if(stop)
 	{
-		sleep (100);
+		//system("pause"); (marche pas sur replit a metre sur vs)
 		exit (1);
 	}
 }
