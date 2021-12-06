@@ -2,10 +2,10 @@
 TP réaliser par ZELL Camille
 ----------------------------------------------- 
 ## TO DO  
-[ ] Création des dossier include et bin  
-[ ] Création des fichier .c et .h :  
-* [ ] ArbresSyntaxiques  
-* [ ] Main  
-* [ ] Divers  
-* [ ] TraitementsArbresSyntaxiques
+* [X] Création des dossier include et bin  
+* [X] Création des fichier .c et .h :  
+* * [X] ArbresSyntaxiques  
+* * [X] Main  
+* * [X] Divers  
+* * [X] TraitementsArbresSyntaxiques
 
