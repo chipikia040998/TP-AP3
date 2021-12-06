@@ -6,14 +6,15 @@
 #include "include/ArbresSyntaxiques.h"
 
 int main (void) 
-{
+{	
+	/* test pour cfonction AficherMessage
 	char MSG[100];
-	sprintf(MSG, "saviez vous que %d + %d font %d",3,7,3+7);
-
-	//test de la fonction Stop
+	sprintf(MSG, "1 + sin(ln(10*x))");
 	AfficherMessage(MSG, false);
 	AfficherMessage("Troisième et dernier message", true);
 	AfficherMessage("Dernier message non affihcer", false);
+	*/
+	
 
 	return 0;
 }
