@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 //inclusion de fichier
-#include "./include/Divers.h"
+#include "../include/Divers.h"
 
 void AfficherMessage (char * message, bool stop)
 {
