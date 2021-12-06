@@ -15,6 +15,13 @@ int main (void)
 	AfficherMessage("Dernier message non affihcer", false);
 	*/
 	
+	TArbreSynt A = ConsBinaire('+',ConsConstante(1), ConsFonction('s', ConsFonction('l', ConsBinaire('*', ConsConstante(10), ConsVariable()))));
+	/*version longue
+	Arbre = ConsBinaire('*', ConsConstante(10), ConsVariable());
+	Arbre = ConsFonction('l', Arbre);
+	Arbre = ConsFonction('s', Arbre);
+	Arbre = ConsBinaire('+', ConsConstante(1), Arbre);
+	*/
 
 	return 0;
 }
