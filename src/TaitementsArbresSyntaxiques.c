@@ -201,25 +201,21 @@ TArbreSynt Deriv(TArbreSynt A)
 		case Constante:
 			return ConsConstante(0);
 		case Fonction :
-			switch(NomFonction(A))
-			{
-				case 'c':
-					return ConsBinaire('-',0,ConsFonction('s', Argument(A)));
-				case 's':
-					return ConsFonction('c', Argument(A));
-				case 'l':
-					Copie = CopieArbre(A);
-				case 't':
-					;
-				case 'r':
-					;
-				default :
-					
-					return NULL;
+	        switch (NomFonction(A))
+	        {
+		        case 'c':
+		            return ConsBinaire('-',ConsConstante(0),ConsBinaire('*',ConsFonction('s', CopieArbre(Argument(A))),Deriv(Argument(A))));
+		        case 's':
+		            return ConsBinaire('*',ConsFonction('c', CopieArbre(Argument(A))),Deriv(Argument(A)));
+		        case 'l':
+		            return ConsBinaire('/',Deriv(Argument(A)),CopieArbre(Argument(A)));
+		        case 't':;
+		        case 'r':;
+		        default:
+		            AfficherMessage("Derivation:Fonction : Fonction inconnu", true);
+		            return NULL;
 			}
-
 		case Binaire :
-			//voir photo pour fair les formules
 			switch(Operateur(A))
 			{
 				case '+':
@@ -229,7 +225,7 @@ TArbreSynt Deriv(TArbreSynt A)
 				case '*' :
 					return ConsBinaire('+', ConsBinaire('*', Deriv(FG(A)), CopieArbre(FD(A))), ConsBinaire('*', CopieArbre(FG(A)), Deriv(FD(A))));
 				case '/':
-					return ConsBinaire('/', ConsBinaire('-',ConsBinaire('*',Deriv(FG(A)),CopieArbre(FD(A)),;
+					return ConsBinaire('/',ConsBinaire('-',ConsBinaire('*',Deriv(FG(A)),CopieArbre(FD(A))),ConsBinaire('*',CopieArbre(FG(A)),Deriv(FD(A)))),ConsBinaire('*',CopieArbre(FD(A)),CopieArbre(FD(A))));
 				default :
 					AfficherMessage("Derivation : Operateur inconnue", true);
 					return NULL;
