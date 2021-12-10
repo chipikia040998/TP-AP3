@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 //inclusion de fichier
 #include "../include/TraitementsArbresSyntaxiques.h"
@@ -61,4 +62,177 @@ double EvaluerArbre(TArbreSynt A, double x)
 			}
 	}
 	return res;
+}
+
+char * ArbreToChaine(TArbreSynt A)
+{
+	char * Chain, * temp;
+	char * G, * D, *arg;
+	char *Racine;
+	char ch[100];
+	int n;
+
+	switch(Nature(A))
+	{
+		case Variable:
+			Chain = (char*)malloc(2 * sizeof(char));
+			if(Chain == NULL)
+			{
+				AfficherMessage("TraitementArbresSyntaxiques:ArbreToChaine:Variable : memoire pleine", true);
+				return NULL;
+			}
+			else
+			{
+				Chain[0]='x';
+				Chain[1]='\0';
+				return Chain;
+			}
+		case Constante:
+			n = sprintf(ch, "%lf", ValeurConstante(A));
+			Chain= (char*)malloc(sizeof(char) * (n+1));
+			if(Chain == NULL)
+			{
+				AfficherMessage("TraitementArbresSyntaxiques:ArbreToChaine:Constante : memoire pleine", true);
+				return NULL;
+			}
+			else
+			{
+				strcpy(Chain,ch);
+				return Chain;
+			}
+		case Fonction:
+			arg = ArbreToChaine(Argument(A));
+			n=strlen(arg)+4;
+			Chain=(char*)malloc(sizeof(char) * n);
+			if(Chain == NULL)
+			{
+				AfficherMessage("TraitementArbresSyntaxiques:ArbreToChaine:Fonction : memoire pleine", true);
+				return NULL;
+			}
+			else
+			{
+				sprintf(Chain,"%c(%s)",NomFonction(A),arg);
+				return Chain;
+			}
+		case Binaire:
+			G = ArbreToChaine( FG(A) );
+			D = ArbreToChaine( FD(A) );
+			
+			if (Nature(FG(A)) == Binaire)
+			{
+				n = strlen(G);
+				temp = (char*)malloc(sizeof(char) * (n+3)); 
+				if(temp==NULL)
+				{
+					AfficherMessage("TraitementArbresSyntaxiques:ArbreToChaine:Bianire : memoire pleine", true);
+					return NULL;
+				}
+				else
+				{
+					sprintf(temp,"(%s)",G);
+					free(G);
+					G = temp;
+				}
+			}
+			if (Nature(FD(A)) == Binaire)
+			{
+				n = strlen(D);
+				temp = (char*)malloc(sizeof(char) * (n+3)); 
+				if(temp==NULL)
+				{
+					AfficherMessage("TraitementArbresSyntaxiques:ArbreToChaine:Bianire : memoire pleine", true);
+					return NULL;
+				}
+				else
+				{
+					sprintf(temp,"(%s)",D);
+					free(D);
+					D = temp;
+				}
+			}
+
+			n = strlen(G) + strlen(D) + 2;
+			Chain = (char*)malloc(sizeof(char) * n);
+			if (Chain == NULL)
+			{
+				AfficherMessage("TraitementArbresSyntaxiques:ArbreToChaine:Bianire : memoire pleine", true);
+				return NULL;
+			}
+			else
+			{
+				sprintf(Chain,"%s%c%s",G,Operateur(A),D);
+				free(G);
+				free(D);
+				return Chain;
+			}
+		default :
+			AfficherMessage("Nature incorrect",true);
+			return NULL;
+	}
+
+	
+	return Chain;
+}
+
+TArbreSynt CopieArbre(TArbreSynt A)
+{
+	switch(Nature(A))
+	{
+		case Variable:
+			return ConsVariable();
+		case Constante :
+			return ConsConstante(ValeurConstante(A));
+		case Fonction :
+			return ConsFonction(NomFonction(A),CopieArbre(Argument(A)));
+		case Binaire:
+			return ConsBinaire(Operateur(A),CopieArbre(FG(A)),CopieArbre(FD(A)));
+		default :
+			AfficherMessage("Erreur de nature dans l'arbre",true);
+	}
+}
+
+TArbreSynt Deriv(TArbreSynt A)
+{
+	TArbreSynt Copie;
+	switch(Nature(A))
+	{
+		case Variable:
+			return ConsConstante(1);
+		case Constante:
+			return ConsConstante(0);
+		case Fonction :
+			switch(NomFonction(A))
+			{
+				case 'c':
+					return ConsBinaire('-',0,ConsFonction('s', Argument(A)));
+				case 's':
+					return ConsFonction('c', Argument(A));
+				case 'l':
+					Copie = CopieArbre(A);
+				case 't':
+					;
+				case 'r':
+					;
+				default :
+					
+					return NULL;
+			}
+
+		case Binaire :
+			//voir photo pour fair les formules
+			switch(Operateur(A))
+			{
+				case '+':
+					return ConsBinaire(Operateur(A), Deriv(FG(A)), Deriv(FD(A)));
+				case '-' :
+					return ConsBinaire(Operateur(A), Deriv(FG(A)), Deriv(FD(A)));
+				case '*' :
+					return ConsBinaire('+', ConsBinaire('*', Deriv(FG(A)), CopieArbre(FD(A))), ConsBinaire('*', CopieArbre(FG(A)), Deriv(FD(A))));
+				case '/':
+					return ConsBinaire('/', ConsBinaire('-',ConsBinaire('*',Deriv(FG(A)),CopieArbre(FD(A)),;
+				default :
+					AfficherMessage("Derivation : Operateur inconnue", true);
+					return NULL;
+			}
+	}
 }
