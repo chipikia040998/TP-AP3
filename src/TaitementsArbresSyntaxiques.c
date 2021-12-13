@@ -232,3 +232,44 @@ TArbreSynt Deriv(TArbreSynt A)
 			}
 	}
 }
+
+TArbreSynt CreerArbreAlea (int H)
+{
+	char tabOper[4]={'+','-','*','/'};
+	char tabFonction[5]={'s','c','t','r','l'};
+	int HauteurFG, HauteurFD ;
+
+	if(H==1)
+	{
+		if (EntierAleatoire(0, 1)==0)
+		{
+			return ConsConstante(EntierAleatoire(0, 19));
+		}
+		else
+		{
+			return ConsVariable();
+		}
+	}
+	else 
+	{
+		if (EntierAleatoire(0, 1)==0)
+		{
+			if(EntierAleatoire(0, 1)==0)
+			{
+				HauteurFG = H-1;
+				HauteurFD = EntierAleatoire(1, H-1);
+			}
+			else
+			{
+				HauteurFG = EntierAleatoire(1, H-1);
+				HauteurFD = H-1;
+			}
+			return ConsBinaire(tabOper[EntierAleatoire(0,3)],CreerArbreAlea(HauteurFG),CreerArbreAlea(HauteurFD));
+		}
+		else
+		{
+			return ConsFonction(tabFonction[EntierAleatoire(0,4)], CreerArbreAlea(H-1));
+		}
+	}
+
+}
