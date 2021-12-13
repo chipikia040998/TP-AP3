@@ -17,10 +17,11 @@ int main (void)
 	AfficherMessage("Troisième et dernier message", true);
 	AfficherMessage("Dernier message non affihcer", false);
 	*/
-	
+	/*
 	TArbreSynt A = ConsBinaire('+',ConsConstante(1), ConsFonction('s', ConsFonction('l', ConsBinaire('*', ConsConstante(10), ConsVariable()))));
 	char *Ch ;
 	srand(time(NULL));
+	*/
 	/*version longue
 	Arbre = ConsBinaire('*', ConsConstante(10), ConsVariable());
 	Arbre = ConsFonction('l', Arbre);
@@ -63,7 +64,43 @@ int main (void)
 	}
 	*/
 
+	int HautMax = 10;
+	int nbEchecs=0;
 
-	Liberer(A);
+	for (int nbTest = 1; nbTest <= 10; nbTest++)
+	{
+		//création arbre alea
+		int HauteurArbreCourant = EntierAleatoire(1, HautMax);
+		TArbreSynt A1 = CreerArbreAlea(()));
+
+		//conversion arbre courant en chaine
+		char * Chaine = ArbreToChaine(A1); 
+		//conversion chaine en arbre
+		TArbreSynt A2;
+		int Fin;
+		ChaineToArbre(Chaine, 0, &A2, &Fin);
+
+		//comparaison des 2 arbres
+		if (!Comparaison(A1, A2))
+		{
+			nbEchecs++;
+		}
+
+		free(Chaine);
+		Liberer(A1);
+		Liberer(A2);
+	}
+
+	if (nbEchecs>0)
+	{
+		printf("Le long test a echoue %d fois \n", nbEchecs);
+	}
+	else
+	{
+		printf("Le long test a reussi");
+	}
+
+
+	//Liberer(A);
 	return 0;
 }

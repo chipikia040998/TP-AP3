@@ -315,10 +315,65 @@ bool Comparaison (TArbreSynt A1 ,TArbreSynt A2)
 	}
 }
 
-TArbreSynt ChaineToArbre (char* Ch)
+bool EstChiffreOuPoint(const char ch[], int deb)
 {
-	if ( Ch[0] == 'x')
+	return ((ch[deb]>=0 && ch[deb]<=9 )|| ch[deb] == '.');
+}
+
+void ChaineToArbre (const char ch[], int deb, TArbreSynt* PA, int *PFin)
+{
+	const char *ssch;
+	if (ch[deb] == 'x')
 	{
-		return ConsVariable();
+		*PA = ConsVariable();
+		*PFin = deb ;
+	}
+	else if( EstChiffreOuPoint(ch,deb))
+	{
+		int fin;
+		while (EstChiffreOuPoint(&ch[deb+1], deb+1))
+		{
+			(*PFin) ++ ;
+		}
+
+		int Taille = *PFin - deb + 2;
+		char* ssch = (char*)malloc(sizeof(char) * Taille);
+		if (ssch == NULL)
+		{
+			AfficherMessage("Probleme dans ChaineToArbre",true);
+		}
+		else
+		{
+			for(int i = deb; i<= *PFin; i++)
+			{
+				ssch[i-deb] = ch[i];
+			}
+			ssch[Taille-1] = '\0';
+			*PA = ConsConstante(atof(ssch));
+		}
+		free(ssch);
+	}
+	else if ((ch[deb]>='a') && (ch[deb]<='z'))
+	{
+		TArbreSynt Arg;
+		int finArg;
+
+		ChaineToArbre(ch, deb+2, &Arg, &finArg);
+		*PA = ConsFonction(ch[deb], Arg);
+		*PFin = finArg +1;
+	}
+	else 
+	{
+		ChaineToArbre(ch, deb, PA, PFin);
+		(*PFin)++;
+	}
+
+	if ( (ch[*PFin] == '+') || (ch[*PFin] == '-') || (ch[*PFin] == '*') || (ch[*PFin] == '/'))
+	{
+		TArbreSynt A2;
+		int PFin2;
+		ChaineToArbre(ch, (*PFin)+2, &A2, &PFin2);
+		*PA = ConsBinaire(ch[(*PFin)+1], *PA, A2);
+		*PFin = PFin2;
 	}
 }
