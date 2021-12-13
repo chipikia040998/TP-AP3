@@ -377,3 +377,26 @@ void ChaineToArbre (const char ch[], int deb, TArbreSynt* PA, int *PFin)
 		*PFin = PFin2;
 	}
 }
+
+void Echantillonner(const char Expr[], double XMin, double XMax, int NbP, const char N[] )
+{
+	TArbreSynt A;
+	int Fin;
+	ChaineToArbre(Expr, 0, &A, &Fin);
+
+	if (Fin != strlen(Expr) -1)
+	{
+		AfficherMessage("Echantillongeur : probleme pour convertir", true);
+	}
+
+	FILE *F;
+	if ( (F=fopen(NF,"w")) == NULL)
+	{
+		AfficherMessage("probleme pendant ouverture fichier", true);
+	}
+	else
+	{
+		fprintf(F,"%d\n",NbP);
+		
+	}
+}

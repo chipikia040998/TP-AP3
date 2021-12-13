@@ -71,7 +71,7 @@ int main (void)
 	{
 		//création arbre alea
 		int HauteurArbreCourant = EntierAleatoire(1, HautMax);
-		TArbreSynt A1 = CreerArbreAlea(()));
+		TArbreSynt A1 = CreerArbreAlea(HautMax);
 
 		//conversion arbre courant en chaine
 		char * Chaine = ArbreToChaine(A1); 
