@@ -21,7 +21,6 @@ void AfficherMessage (char * message, bool stop)
 
 int EntierAleatoire(int inf, int sup)
 {
-    srand(time(NULL));
     int r = inf + rand() % (sup - inf + 1);
     return r;
 }

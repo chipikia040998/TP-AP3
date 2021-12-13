@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 //inclusion de fichier
 #include "../include/TraitementsArbresSyntaxiques.h"
 #include "../include/ArbresSyntaxiques.h"
@@ -88,7 +89,7 @@ char * ArbreToChaine(TArbreSynt A)
 				return Chain;
 			}
 		case Constante:
-			n = sprintf(ch, "%lf", ValeurConstante(A));
+			n = sprintf(ch, "%.lf", ValeurConstante(A));
 			Chain= (char*)malloc(sizeof(char) * (n+1));
 			if(Chain == NULL)
 			{
@@ -272,4 +273,52 @@ TArbreSynt CreerArbreAlea (int H)
 		}
 	}
 
+}
+
+bool Comparaison (TArbreSynt A1 ,TArbreSynt A2)
+{
+	if (Nature(A1) != Nature(A2))
+	{
+		return false;
+	}
+	else 
+	{
+		switch(Nature(A1))
+		{
+			case Variable:
+				return true;
+			case Constante:
+				return (ValeurConstante(A1) == ValeurConstante(A2));
+			case Binaire:
+				if (Operateur(A1) != Operateur(A2))
+				{
+					return false;
+				}
+				else
+				{
+					return (Comparaison(FG(A1), FG(A2)) && Comparaison(FD(A1),FD(A2))) ;
+				}
+			case Fonction:
+				if (NomFonction(A1) != NomFonction(A2))
+				{
+					return false;
+				}
+				else
+				{
+					return Comparaison(Argument(A1), Argument(A2));
+				}
+			default:
+				AfficherMessage("Erreur de enature dans Comparaison", true);
+				return NULL;
+
+		}
+	}
+}
+
+TArbreSynt ChaineToArbre (char* Ch)
+{
+	if ( Ch[0] == 'x')
+	{
+		return ConsVariable();
+	}
 }

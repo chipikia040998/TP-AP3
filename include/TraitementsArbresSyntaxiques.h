@@ -6,3 +6,5 @@ char * ArbreToChaine(TArbreSynt A);
 TArbreSynt CopieArbre(TArbreSynt A);
 TArbreSynt Deriv(TArbreSynt A);
 TArbreSynt CreerArbreAlea (int H);
+bool Comparaison (TArbreSynt Arbr1, TArbreSynt Arbr2);
+TArbreSynt ChaineToArbre (char* Ch);
